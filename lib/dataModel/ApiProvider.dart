@@ -24,7 +24,7 @@ class ApiProvider {
     _dio.options.headers['content-Type'] = 'application/json';
     _dio.options.headers['Access-Control-Allow-Origin'] = '*';
     Response response = await _dio.get(
-      'http://svapplications.000webhostapp.com',
+      'https://svapplications.000webhostapp.com',
       // data:{
       //   'username': username,
       //   'userpass': userpass,
