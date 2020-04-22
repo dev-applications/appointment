@@ -1,3 +1,5 @@
+import 'package:appointment_management/dataModel/ApiProvider.dart';
+import 'package:appointment_management/dataModel/UserModel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +9,7 @@ import 'AppointmentPage.dart';
 
 class MyLoginPage extends StatefulWidget {
   MyLoginPage({Key key, this.title}) : super(key: key);
+  
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -21,18 +24,31 @@ class MyLoginPage extends StatefulWidget {
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
+  //State<StatefulWidget> createState() => _MyHomePageState(scaffoldKey);
 }
 
 class _MyHomePageState extends State<MyLoginPage> {
+
+  final formKey = GlobalKey<FormState>();
+  final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
+
+  _MyHomePageState();
+
+  String _username;
+  String _password;
+
+  ApiProvider _apiProvider = ApiProvider();
 
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
     return Scaffold(
+      key: scaffoldKey,
       body: Container(
         width: screenSize.width,
         height: screenSize.height,
-
+        child: Form(
+        key: formKey,
         child: Stack(
           children: <Widget>[
             //make curves for desgining
@@ -113,7 +129,7 @@ class _MyHomePageState extends State<MyLoginPage> {
                           usernameField(context),
                           passwordField(),
                           SizedBox(height: 16,),
-                          loginButton(),
+                          loginButton(formKey),
                           // FlatButton.icon(
                           //     onPressed: (){
                           //       // Navigator.of(context).push(MaterialPageRoute(
@@ -168,7 +184,7 @@ class _MyHomePageState extends State<MyLoginPage> {
                                 passwordField(),
                                 //Text("", style: TextStyle(fontSize: 15, fontWeight: FontWeight.w300, letterSpacing: 1.0, color: Colors.grey[800]),),
                                 SizedBox(height: 16,),
-                                loginButton(),
+                                loginButton(formKey),
 
                                 // FlatButton.icon(
                                 //   onPressed: (){
@@ -198,9 +214,9 @@ class _MyHomePageState extends State<MyLoginPage> {
 
 
 
-          ],
+            ],
+          ),
         ),
-
       ),
     );
   }
@@ -212,6 +228,7 @@ class _MyHomePageState extends State<MyLoginPage> {
         ),
       ),
       onSaved: (String value){
+        _username = value;
       },
     );
   }
@@ -224,13 +241,14 @@ class _MyHomePageState extends State<MyLoginPage> {
       ),
       obscureText: true,
         onSaved: (String value) {
+          _password = value;
         },
     );
   }
 
-    Widget loginButton(){
+    Widget loginButton(GlobalKey<FormState> formKey){
+      Future<User> _futureAlbum;
     return Container(
-      
       padding: EdgeInsets.only(top: 20.0),
       child: FlatButton(
           child: Text(
@@ -242,12 +260,28 @@ class _MyHomePageState extends State<MyLoginPage> {
           splashColor: Colors.green,
           onPressed: (){
               // if(user.username=="username" && user.userpass=="user@123") {
-                Navigator.push(context,
-                    MaterialPageRoute(
-                        builder: (context) => MyAppointmentPage(title: 'Euro Rail')));
+                final bool v = formKey.currentState.validate();
+                if(v){
+                  formKey.currentState.save();
+                  setState(() {
+                          _futureAlbum = _apiProvider.userLogin(_username, _username);
+                          print(_futureAlbum);
+                        });
+                  //print('object');
+                  // var snackbar = new SnackBar(
+                  //   content: Text('Username: $_username and Password $_password'),
+                  // );
+                  // scaffoldKey.currentState.showSnackBar(snackbar);
+                }
+                // Navigator.push(context,
+                //     MaterialPageRoute(
+                //         builder: (context) => MyAppointmentPage(title: 'Euro Rail')));
               // }
           },
       ),
     );
   }
 }
+
+
+
