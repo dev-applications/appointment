@@ -25472,7 +25472,7 @@ l.bC$.b.m(0,"Access-Control-Allow-Origin","*")
 p=B.a4H(null,null,null,null,null,null,null,null,null,null,null,null,null)
 p.a="GET"
 t=3
-return P.al(l.Cv(0,"http://svapplications.000webhostapp.com",null,null,p,null,u.z),$async$os)
+return P.al(l.Cv(0,"https://svapplications.000webhostapp.com",null,null,p,null,u.z),$async$os)
 case 3:o=d
 if(o.d===201){l=C.ar.dU(0,o.h(0))
 P.ho(l)
